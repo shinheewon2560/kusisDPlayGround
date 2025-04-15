@@ -16,6 +16,12 @@ def show_crew_list(response : Response, db : Session = Depends(get_DB)):
     response.status_code = status.HTTP_202_ACCEPTED
     return _result
 
+@router.get("/list/{crew_id}")
+def serching_id(crew_id : int, response : Response, db : Session = Depends(get_DB)):
+    _result = crew_crud.serching_crew(crew_id,db)
+    response.status_code = status.HTTP_201_CREATED
+    return _result
+
 @router.post("/add")
 def add_crew(CrewApply : crew_schema.crew_form, user_id : int, response: Response, db : Session = Depends(get_DB)):
     _result = crew_crud.post_crew(db, CrewApply,user_id)
@@ -25,5 +31,11 @@ def add_crew(CrewApply : crew_schema.crew_form, user_id : int, response: Respons
 @router.put("/modify")
 def modify_crew(crew_id : int, CrewModify : crew_schema.crew_form, user_id : int, response : Response, db : Session = Depends(get_DB)):
     _result = crew_crud.update_crew(CrewModify,crew_id, user_id, db)
+    response.status_code = status.HTTP_202_ACCEPTED
+    return _result
+
+@router.delete("/delete")
+def delete_crew(crew_id : int , user_id : int, response : Response, db : Session = Depends(get_DB)):
+    _result = crew_crud.delete_crew(crew_id, user_id, db)
     response.status_code = status.HTTP_202_ACCEPTED
     return _result
